@@ -1,0 +1,17 @@
+services:
+
+  web:
+
+    build:
+      context: ./app
+
+    container_name: erp_web
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./app:/app
+
+    env_file:
+      - .env
