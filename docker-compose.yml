@@ -8,7 +8,9 @@ services:
     container_name: erp_web
 
     ports:
-      - "8000:8000"
+      - "8001:8000"
+    environment:
+      - ALLOWED_HOSTS=192.168.10.253,localhost,127.0.0.1
 
     volumes:
       - ./app:/app
