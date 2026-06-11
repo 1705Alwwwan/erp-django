@@ -1,0 +1,23 @@
+name: Django CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t erp-django ./app
+
+      - name: Django Check
+        run: |
+          docker run --rm erp-django python manage.py check
