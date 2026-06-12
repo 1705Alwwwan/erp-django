@@ -9,11 +9,20 @@ services:
 
     ports:
       - "8001:8000"
+
     environment:
-      - ALLOWED_HOSTS=192.168.10.253,localhost,127.0.0.1
+      - ALLOWED_HOSTS="erp-web.local, 192.168.10.253,localhost,127.0.0.1"
+
+    networks:
+      - infra-network
+
 
     volumes:
       - ./app:/app
 
     env_file:
       - .env
+
+networks:
+  infra-network:
+    external: true
