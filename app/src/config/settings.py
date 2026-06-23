@@ -22,7 +22,14 @@ sys.path.insert(0, str(BASE_DIR / "src"))
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=%!n)$0*8q7!#x1nrxm964$&uzd@=v01tcsg$k*d!yy68=92b7'
+#SECRET_KEY = 'django-insecure-=%!n)$0*8q7!#x1nrxm964$&uzd@=v01tcsg$k*d!yy68=92b7'
+
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-dev-key"
+)
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,11 +90,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "appdb",
-        "USER": "admin",
-        "PASSWORD": "admin123",
-        "HOST": "postgres",
-        "PORT": "5432",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 
@@ -128,6 +135,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
