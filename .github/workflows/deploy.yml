@@ -11,14 +11,29 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Deploy ERP Django
-        run: |
-          cd /opt/infra-lab/apps/erp-django
 
+      - uses: actions/checkout@v4
+
+      - name: Update Repository
+        run: |
+          cd /opt/k3s-lab/apps/erp-django/erp-django
           git pull origin main
 
-          docker compose down
+      - name: Build Image
+        run: |
+          cd /opt/k3s-lab/apps/erp-django/erp-django/app
+          sudo docker build -t erp-django:latest .
 
-          docker compose up -d --build
+      - name: Import Image
+        run: |
+          cd /opt/k3s-lab/apps/erp-django/erp-django/app
+          sudo docker save erp-django:latest -o erp.tar
+          sudo k3s ctr images import erp.tar
 
-          docker image prune -f
+      - name: Restart Deployment
+        run: |
+          kubectl rollout restart deployment/erp-django -n erp
+
+      - name: Cleanup
+        run: |
+          rm -f /opt/k3s-lab/apps/erp-django/erp-django/app/erp.tar
