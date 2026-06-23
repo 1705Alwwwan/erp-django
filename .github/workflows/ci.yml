@@ -6,12 +6,14 @@ on:
       - main
 
 jobs:
-  build:
+
+  test:
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build Docker Image
@@ -20,4 +22,5 @@ jobs:
 
       - name: Django Check
         run: |
-          docker run --rm erp-django python manage.py check
+          docker run --rm erp-django \
+          python manage.py check
