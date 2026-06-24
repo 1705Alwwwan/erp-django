@@ -19,7 +19,7 @@ from django.urls import path
 from django.http import HttpResponse
 
 def test(request):
-    return HttpResponse("Version 3 nih bos")
+    return HttpResponse("Version 4 lah	")
 
 
 
