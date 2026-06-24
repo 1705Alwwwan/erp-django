@@ -51,18 +51,21 @@ jobs:
 
       - name: Restart Deployment
         run: |
+          export KUBECONFIG=/home/alwan/.kube/config
           echo "=== ROLLOUT RESTART ==="
 
           kubectl rollout restart deployment/erp-django -n erp
 
       - name: Wait Rollout
         run: |
+          export KUBECONFIG=/home/alwan/.kube/config
           echo "=== WAIT ROLLOUT ==="
 
           kubectl rollout status deployment/erp-django -n erp --timeout=180s
 
       - name: Check Pods
         run: |
+          export KUBECONFIG=/home/alwan/.kube/config
           echo "=== POD STATUS ==="
 
           kubectl get pods -n erp -o wide
