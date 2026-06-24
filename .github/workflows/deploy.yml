@@ -14,23 +14,55 @@ jobs:
       - name: Update Repository
         run: |
           cd /opt/k3s-lab/apps/erp-django/erp-django
+
+          echo "=== GIT PULL ==="
           git pull origin main
 
-      - name: Build Image
+      - name: Build Docker Image
         run: |
           cd /opt/k3s-lab/apps/erp-django/erp-django/app
+
+          echo "=== BUILD IMAGE ==="
           docker build -t erp-django:latest .
 
-      - name: Import Image
+      - name: Export Image
         run: |
           cd /opt/k3s-lab/apps/erp-django/erp-django/app
+
+          echo "=== EXPORT IMAGE ==="
           docker save erp-django:latest -o erp.tar
-          k3s ctr images import erp.tar
+
+          echo "=== VERIFY TAR ==="
+          ls -lh erp.tar
+
+      - name: Import To K3s
+        run: |
+          cd /opt/k3s-lab/apps/erp-django/erp-django/app
+
+          echo "=== IMPORT IMAGE TO K3S ==="
+
+          sudo -n /usr/local/bin/k3s ctr images import erp.tar
+
+      - name: Verify Image
+        run: |
+          echo "=== VERIFY IMAGE EXISTS IN CONTAINERD ==="
+
+          sudo -n /usr/local/bin/k3s ctr images ls | grep erp-django || true
 
       - name: Restart Deployment
         run: |
+          echo "=== ROLLOUT RESTART ==="
+
           kubectl rollout restart deployment/erp-django -n erp
 
       - name: Wait Rollout
         run: |
-          kubectl rollout status deployment/erp-django -n erp
+          echo "=== WAIT ROLLOUT ==="
+
+          kubectl rollout status deployment/erp-django -n erp --timeout=180s
+
+      - name: Check Pods
+        run: |
+          echo "=== POD STATUS ==="
+
+          kubectl get pods -n erp -o wide
