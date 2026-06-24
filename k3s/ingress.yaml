@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: erp-django
+  namespace: erp
+
+spec:
+
+  ingressClassName: traefik
+
+  rules:
+
+  - host: erp.lab.local
+
+    http:
+
+      paths:
+
+      - path: /
+        pathType: Prefix
+
+        backend:
+
+          service:
+            name: erp-django
+
+            port:
+              number: 8000

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: erp-config
+  namespace: erp
+
+data:
+  DB_NAME: "appdb"
+  DB_USER: "appuser"
+  DB_HOST: "postgres-service.database.svc.cluster.local"
+  DB_PORT: "5432"
+
+  ALLOWED_HOSTS: "erp.lab.local,localhost,127.0.0.1"
+
+  TZ: "Asia/Jakarta"
